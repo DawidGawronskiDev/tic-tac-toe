@@ -4,3 +4,34 @@
     font-weight: 600;
     font-style: normal;
 } */
+
+* {
+  margin: 0;
+  padding: 0;
+
+  outline: 1px solid red;
+  box-sizing: border-box;
+}
+
+main {
+  width: 100%;
+  min-height: 100vh;
+
+  display: grid;
+  place-content: center;
+}
+
+.gameboard-elem {
+  aspect-ratio: 1 / 1;
+  width: 300px;
+
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  gap: 8px;
+
+  padding: 8px;
+}
+
+.gameboard-cell[data-mark=" "] {
+  cursor: pointer;
+}
