@@ -21,6 +21,32 @@ main {
   place-content: center;
 }
 
+/* ********** TURN DISPLAY ***********/
+
+.turn-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.current-player-mark {
+  aspect-ratio: 1 / 1;
+  width: 20px;
+
+  background-size: 100%;
+}
+
+main[data-current="x"] .current-player-mark {
+  background-image: url("./assets/icon-x.svg");
+}
+
+main[data-current="o"] .current-player-mark {
+  background-image: url("./assets/icon-o.svg");
+}
+
+/* ********** GAMEBOARD ********** */
+
 .gameboard-elem {
   aspect-ratio: 1 / 1;
   width: 300px;
@@ -32,6 +58,28 @@ main {
   padding: 8px;
 }
 
+.gameboard-cell {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80%;
+}
+
 .gameboard-cell[data-mark=" "] {
   cursor: pointer;
+}
+
+.gameboard-cell[data-mark="x"] {
+  background-image: url("./assets/icon-x.svg");
+}
+
+.gameboard-cell[data-mark="o"] {
+  background-image: url("./assets/icon-o.svg");
+}
+
+main[data-current="x"] .gameboard-cell[data-mark=""]:hover {
+  background-image: url("./assets/icon-x-outline.svg");
+}
+
+main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
+  background-image: url("./assets/icon-o-outline.svg");
 }
