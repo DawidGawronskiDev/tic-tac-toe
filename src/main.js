@@ -1,26 +1,27 @@
-import { doc } from "prettier";
 import "./style.css";
 
 const ROOT = document.querySelector("#root");
 
 const PLAYERS = [
   {
-    name: "",
+    name: "PLAYER 1",
     mark: "x",
     isHuman: true,
     isWinner: false,
+    color: "#31C3BD",
   },
   {
-    name: "",
+    name: "PLAYER 2",
     mark: "o",
-    isHuman: false,
+    isHuman: true,
     isWinner: false,
+    color: "#F2B137",
   },
 ];
 
 let currentPlayer = PLAYERS[0];
 
-const GAMEBOARD_ARR = Array.from({ length: 9 }, () => ({ mark: "" }));
+const GAMEBOARD_ARR = Array.from({ length: 9 }, (_, index) => ({ mark: "", index }));
 
 const CREATE_GAMEBOARD = (arr) => {
   const ELEMENT = document.createElement("div");
@@ -36,6 +37,7 @@ const CREATE_CELL = (cell) => {
   const ELEMENT = document.createElement("div");
   ELEMENT.classList.add("gameboard-cell");
   ELEMENT.dataset.mark = cell.mark;
+  ELEMENT.dataset.index = cell.index;
 
   return ELEMENT;
 };
@@ -46,6 +48,11 @@ const ASSING_CURRENT_PLAYER = (currentPlayer) => {
 
 const RENDER = () => {
   ROOT.innerHTML = "";
+
+  if (PLAYERS.some((player) => player.isWinner) || GAMEBOARD_ARR.every(cell => cell.mark)) {
+    ROOT.appendChild(CREATE_POPUP(currentPlayer, PLAYERS, GAMEBOARD_ARR, ROOT))
+  }
+
   ROOT.appendChild(CREATE_GAMEBOARD(GAMEBOARD_ARR));
 };
 
@@ -57,7 +64,6 @@ const CHANGE_PLAYER = () => {
 
 const PLAYER_CHOICE = (currentPlayer, arr) => {
   const CELLS = Array.from(document.querySelectorAll(".gameboard-cell"));
-
   CELLS.forEach((cell) =>
     cell.addEventListener("click", (e) => {
       if (!e.target.dataset.mark) {
@@ -72,16 +78,24 @@ const PLAYER_CHOICE = (currentPlayer, arr) => {
 };
 
 const CPU_CHOICE = (currentPlayer, arr) => {
-  const CELL_INDEX = Math.floor(Math.random() * 8);
+  const emptyCellIndices = arr.reduce((indices, cell, index) => {
+    if (!cell.mark) {
+      indices.push(index);
+    }
+    return indices;
+  }, []);
 
-  if (arr[CELL_INDEX].mark) {
-    CPU_CHOICE(arr);
-  } else {
-    arr[CELL_INDEX].mark = currentPlayer.mark;
-    CHECK_WINNER(arr);
-    CHANGE_PLAYER();
-    GAME_CONTROLLER();
+  if (emptyCellIndices.length === 0) {
+    GAME_CONTROLLER(); // Handle case when no empty cells are available
+    return;
   }
+
+  const CELL_INDEX = emptyCellIndices[Math.floor(Math.random() * emptyCellIndices.length)];
+
+  arr[CELL_INDEX].mark = currentPlayer.mark;
+  CHECK_WINNER(arr);
+  CHANGE_PLAYER();
+  GAME_CONTROLLER();
 };
 
 const CHECK_WINNER = (arr) => {
@@ -117,21 +131,76 @@ const CHECK_WINNER = (arr) => {
   }
 
   if (arr.every((cell) => cell.mark)) {
-    isDraw = true;
+    isDraw = true; // Set isDraw to true when all cells are marked
     return "DRAW";
   }
-
   return false;
 };
 
+const CREATE_POPUP = (currentPlayer, players, arr, root) => {
+  const ELEM = document.createElement("div");
+  ELEM.classList.add("popup");
+  const winner = players.find(player => player.isWinner);
+  const isDraw = arr.every(cell => cell.mark);
+
+  // PLAYER VS CPU
+  if (players.some(player => !player.isHuman)) {
+    const CPU_PLAYER = players.find(player => !player.isHuman);
+    const message = CPU_PLAYER.isWinner ? "OH NO, YOU LOST…" : "YOU WON!";
+    const playerName = CPU_PLAYER.isWinner ? CPU_PLAYER.name : currentPlayer.name;
+
+    ELEM.innerHTML = `
+      <span class="heading-xs">${message}</span>
+      <div>
+        <div class="popup-mark" data-mark="${currentPlayer.mark}"></div>
+        <span class="heading-l">${playerName} TAKES THE ROUND</span>
+      </div>
+      <div>
+        <button class="secondary-button-one">QUIT</button>
+        <button class="secondary-button-two">NEXT ROUND</button>
+      </div>
+    `;
+  // WHEN PLAYER VS PLAYER
+  } else if (players.every(player => player.isHuman)) {
+    const winnerName = winner ? winner.name : 0;
+    const message = `${winnerName === currentPlayer.name ? "YOU" : winnerName} WINS!`;
+
+    ELEM.innerHTML = `
+      <span class="heading-xs">${message}</span>
+      <div>
+        <div class="popup-mark" data-mark="${currentPlayer.mark}"></div>
+        <span class="heading-l">TAKES THE ROUND</span>
+      </div>
+      <div>
+        <button class="secondary-button-one">QUIT</button>
+        <button class="secondary-button-two">NEXT ROUND</button>
+      </div>
+    `;
+  }
+  
+  if (isDraw && !winner) {
+    root.dataset.current = "";
+    ELEM.innerHTML = `
+      <span class="heading-l">ROUND TIED</span>
+      <div>
+        <button class="secondary-button-one">QUIT</button>
+        <button class="secondary-button-two">NEXT ROUND</button>
+      </div>
+    `;
+  }
+
+  return ELEM;
+};
+
 const GAME_CONTROLLER = () => {
-  ASSING_CURRENT_PLAYER(currentPlayer);
   RENDER();
 
-  if (PLAYERS.some((player) => player.isWinner)) {
-    ROOT.dataset.current = "";
+  if (PLAYERS.some((player) => player.isWinner) || GAMEBOARD_ARR.every(cell => cell.mark)) {
+    CREATE_POPUP(currentPlayer, PLAYERS, GAMEBOARD_ARR, ROOT)
     return;
   }
+
+  ASSING_CURRENT_PLAYER(currentPlayer);
 
   currentPlayer.isHuman
     ? PLAYER_CHOICE(currentPlayer, GAMEBOARD_ARR)
@@ -139,3 +208,10 @@ const GAME_CONTROLLER = () => {
 };
 
 GAME_CONTROLLER();
+
+const INIT = () => {
+  currentPlayer = PLAYERS[0];
+  GAMEBOARD_ARR = Array.from({ length: 9 }, (index, mark) => ({ mark: "", index }));
+
+  GAME_CONTROLLER();
+}

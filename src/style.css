@@ -1,15 +1,115 @@
-/* @font-face {
-    font-family: 'MyFont';
-    src: url('./my-font.woff2') format('woff2');
-    font-weight: 600;
-    font-style: normal;
-} */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@300;500;700&family=Outfit:wght@500;700&display=swap');
+
+@keyframes drop-from-up {
+  from {
+    opacity: 0%;
+    transform: translateY(-100%);
+  } to {
+    opacity: 100%;
+    transform: translateY();
+  }
+}
+
+@keyframes gameboard-cell {
+  from {
+    background-position-y: 0%;
+  }
+  to {
+    background-position-y: 50%;
+  }
+}
+
+:root {
+  /* Light Blue */
+  --c1: #31c4bf;
+  /* Light Blue (Hover) */
+  --c2: #63e9e4;
+  /* Light Yellow */
+  --c3: #F2B137;
+  /* Light Yellow (Hover) */
+  --c4: #FFC860;
+  /* Dark Navy */
+  --c5: #1A2A33;
+  /* Semi Dark Navy */
+  --c6: #1F3641;
+  /* Silver */
+  --c7: #A8BFC9;
+  /* Silver (Hover) */
+  --c8: #DBE8ED;
+}
+
+.heading-l {
+  font-weight: bold;
+  font-size: 40px;
+  kerning: 2.5px;
+}
+
+.heading-m {
+  font-weight: bold;
+  font-size: 24px;
+  kerning: 1.5px;
+}
+
+.heading-s {
+  font-weight: bold;
+  font-size: 20px;
+  kerning: 1.25px;
+}
+
+.heading-s {
+  font-weight: bold;
+  font-size: 16px;
+  kerning: 1px;
+}
+
+.body {
+  font-weight: medium;
+  font-size: 14px;
+  kerning: 0.8px; 
+}
+
+*[class^="secondary-button"] {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  kerning: 1px;
+
+  color: var(--c5);
+
+  border-radius: 10px;
+  border: none;
+
+  padding: 15px;
+}
+
+.secondary-button-one {
+  background-color: var(--c3);
+  box-shadow: 0px -4px 0px 0px #CC8B13 inset;
+}
+
+.secondary-button-one:hover {
+  transition: 0.2s;
+  background-color: var(--c4);
+  box-shadow: 0px -4px 0px 0px #CC8B13 inset;
+}
+
+.secondary-button-two {
+  background-color: var(--c1);
+  box-shadow: 0px -4px 0px 0px #118C87 inset;
+}
+
+.secondary-button-two:hover {
+  transition: 0.2s;
+  background-color: var(--c2);
+  box-shadow: 0px -4px 0px 0px #118C87 inset;
+}
+
 
 * {
   margin: 0;
   padding: 0;
 
-  outline: 1px solid red;
+  /* outline: 1px solid red; */
   box-sizing: border-box;
 }
 
@@ -19,6 +119,10 @@ main {
 
   display: grid;
   place-content: center;
+
+  font-family: 'Outfit', sans-serif;
+
+  background-color: var(--c5);
 }
 
 /* ********** TURN DISPLAY ***********/
@@ -49,23 +153,26 @@ main[data-current="o"] .current-player-mark {
 
 .gameboard-elem {
   aspect-ratio: 1 / 1;
-  width: 300px;
+  width: 460px;
 
   display: grid;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-  gap: 8px;
-
-  padding: 8px;
+  gap: 20px;
 }
 
 .gameboard-cell {
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 80%;
+  background-size: 50%;
+
+  background-color: var(--c6);
+  box-shadow: 0px -8px 0px 0px #10212A inset;
+
+  border-radius: 15px;
 }
 
-.gameboard-cell[data-mark=" "] {
-  cursor: pointer;
+.gameboard-cell[data-mark=" "]:hover {
+  animation: gameboard-cell 1s ease-in-out;
 }
 
 .gameboard-cell[data-mark="x"] {
@@ -82,4 +189,74 @@ main[data-current="x"] .gameboard-cell[data-mark=""]:hover {
 
 main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
   background-image: url("./assets/icon-o-outline.svg");
+}
+
+/* ********** POPUP ********** */
+
+.popup {
+  z-index: 999;
+
+  position: fixed;
+  width: 100%;
+  height: 266px;
+
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+
+  box-shadow: 0 0 0 100vh hsla(0, 100%, 0%, 0.7);
+  background-color: var(--c6);
+
+  animation: drop-from-up 0.5s ease-in-out;
+}
+
+.popup > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup > *:nth-child(2) {
+  gap: 24px;
+}
+
+.popup > *:nth-child(3) {
+  gap: 16px;
+}
+
+.popup .heading-xs {
+  color: var(--c7);
+}
+
+main[data-current="x"] .popup-mark {
+  background-image: url("./assets/icon-x.svg");
+}
+
+main[data-current="x"] .popup .heading-l {
+  color: var(--c1);
+}
+
+main[data-current="o"] .popup-mark {
+  background-image: url("./assets/icon-o.svg");
+}
+
+main[data-current="o"] .popup .heading-l {
+  color: var(--c3);
+}
+
+main[data-current=""] .popup .heading-l {
+  color: var(--c7);
+}
+
+.popup-mark {
+  aspect-ratio: 1 / 1;
+  width: 64px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
 }
