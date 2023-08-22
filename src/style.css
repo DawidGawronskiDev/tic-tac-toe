@@ -83,25 +83,23 @@
 }
 
 .secondary-button-one {
-  background-color: var(--c3);
-  box-shadow: 0px -4px 0px 0px #CC8B13 inset;
+  background-color: var(--c7);
+  box-shadow: 0px -4px 0px 0px #6B8997 inset;
 }
 
 .secondary-button-one:hover {
   transition: 0.2s;
-  background-color: var(--c4);
-  box-shadow: 0px -4px 0px 0px #CC8B13 inset;
+  background-color: var(--c8);
 }
 
 .secondary-button-two {
-  background-color: var(--c1);
-  box-shadow: 0px -4px 0px 0px #118C87 inset;
+  background-color: var(--c3);
+  box-shadow: 0px -4px 0px 0px #CC8B13 inset;
 }
 
 .secondary-button-two:hover {
   transition: 0.2s;
-  background-color: var(--c2);
-  box-shadow: 0px -4px 0px 0px #118C87 inset;
+  background-color: var(--c4);
 }
 
 
@@ -151,6 +149,19 @@ main[data-current="o"] .current-player-mark {
 
 /* ********** GAMEBOARD ********** */
 
+.x-icon {
+  fill: var(--c1);
+}
+
+.o-icon {
+  fill: var(--c3);
+}
+
+.x-icon, .o-icon {
+  aspect-ratio: 1 / 1;
+  transform: scale(110%);
+}
+
 .gameboard-elem {
   aspect-ratio: 1 / 1;
   width: 460px;
@@ -165,6 +176,9 @@ main[data-current="o"] .current-player-mark {
   background-position: center;
   background-size: 50%;
 
+  display: grid;
+  place-content: center;
+
   background-color: var(--c6);
   box-shadow: 0px -8px 0px 0px #10212A inset;
 
@@ -175,20 +189,25 @@ main[data-current="o"] .current-player-mark {
   animation: gameboard-cell 1s ease-in-out;
 }
 
-.gameboard-cell[data-mark="x"] {
-  background-image: url("./assets/icon-x.svg");
-}
-
-.gameboard-cell[data-mark="o"] {
-  background-image: url("./assets/icon-o.svg");
-}
-
 main[data-current="x"] .gameboard-cell[data-mark=""]:hover {
   background-image: url("./assets/icon-x-outline.svg");
 }
 
 main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
   background-image: url("./assets/icon-o-outline.svg");
+}
+
+main[data-current="x"] .winning-cell {
+  background-color: var(--c1);
+}
+
+main[data-current="o"] .winning-cell {
+  background-color: var(--c3);
+}
+
+.winning-cell .x-icon,
+.winning-cell .o-icon {
+    fill: var(--c6);
 }
 
 /* ********** POPUP ********** */
