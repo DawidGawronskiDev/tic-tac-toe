@@ -197,11 +197,11 @@ main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
   background-image: url("./assets/icon-o-outline.svg");
 }
 
-main[data-current="x"] .winning-cell {
+.winning-cell[data-mark="x"] {
   background-color: var(--c1);
 }
 
-main[data-current="o"] .winning-cell {
+.winning-cell[data-mark="o"] {
   background-color: var(--c3);
 }
 
@@ -252,30 +252,62 @@ main[data-current="o"] .winning-cell {
   color: var(--c7);
 }
 
-main[data-current="x"] .popup-mark {
-  background-image: url("./assets/icon-x.svg");
-}
-
-main[data-current="x"] .popup .heading-l {
+.popup .heading-l[data-mark="x"] {
   color: var(--c1);
 }
 
-main[data-current="o"] .popup-mark {
-  background-image: url("./assets/icon-o.svg");
-}
-
-main[data-current="o"] .popup .heading-l {
+.popup .heading-l[data-mark="o"] {
   color: var(--c3);
 }
 
-main[data-current=""] .popup .heading-l {
+.popup .heading-l {
   color: var(--c7);
 }
 
 .popup-mark {
   aspect-ratio: 1 / 1;
   width: 64px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ********** SCOREBOARD ********** */
+
+.scoreboard {
+  width: 460px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+
+  grid-template-areas: "p1 ties p2";
+
+  margin: 16px 0 0 0;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  padding: 12px 0;
+}
+
+.score:nth-child(1) {
+  grid-area: p1;
+  background-color: var(--c1);
+}
+
+.score:nth-child(2) {
+  grid-area: p2;
+  background-color: var(--c3);
+}
+
+.score:nth-child(3) {
+  background-color: var(--c7);
 }

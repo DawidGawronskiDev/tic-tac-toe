@@ -1,131 +1,142 @@
 import "./style.css";
 
-const ROOT = document.querySelector("#root");
+const root = document.querySelector("#root");
 
-const PLAYERS = [
+const playersArr = [
   {
     name: "PLAYER 1",
     mark: "x",
     isHuman: true,
     isWinner: false,
     color: "#31C3BD",
+    score: 0,
   },
   {
     name: "PLAYER 2",
     mark: "o",
-    isHuman: true,
+    isHuman: false,
     isWinner: false,
     color: "#F2B137",
+    score: 0,
   },
+  {
+    name: "TIES",
+    score: 0,
+  }
 ];
 
-let currentPlayer = PLAYERS[0];
+let currentPlayer = playersArr[0];
+let gameboardArr = Array.from({ length: 9 }, (_, index) => ({ mark: "", index }));
+let winningCombination = [];
 
-const GAMEBOARD_ARR = Array.from({ length: 9 }, (_, index) => ({ mark: "", index }));
+const createGameboard = (arr) => {
+  const gameboardElement = document
+    .createElement("div");
+  gameboardElement.classList.add("gameboard-elem")
 
-const CREATE_GAMEBOARD = (arr) => {
-  const ELEMENT = document.createElement("div");
-  ELEMENT.classList.add("gameboard-elem");
+  arr.forEach(cell => gameboardElement
+    .appendChild(createCell(cell)))
 
-  ELEMENT.innerHTML = "";
-  arr.forEach((cell) => ELEMENT.appendChild(CREATE_CELL(cell)));
+  return gameboardElement
+}
 
-  return ELEMENT;
-};
+const createCell = (cell) => {
+  const cellElement = document
+    .createElement("div");
+  cellElement.classList.add("gameboard-cell");
+  cellElement.dataset.mark = cell.mark;
 
-const CREATE_CELL = (cell) => {
-  const ELEMENT = document.createElement("div");
-  ELEMENT.classList.add("gameboard-cell");
-  ELEMENT.dataset.mark = cell.mark;
-  ELEMENT.dataset.index = cell.index;
-
-  if (ELEMENT.dataset.mark === "x") {
-    ELEMENT.innerHTML = `
-    <svg class="x-icon" width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill-rule="evenodd"/></svg>`;
+  if (cell.mark === "x") {
+    cellElement.innerHTML = `<svg class="x-icon" width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill-rule="evenodd"/></svg>`
+  }
+  if (cell.mark === "o") {
+    cellElement.innerHTML = `<svg class="o-icon" width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z"/></svg>`;
   }
 
-  if (ELEMENT.dataset.mark === "o") {
-    ELEMENT.innerHTML = 
-    `<svg class="o-icon" width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z"/></svg>`
+  return cellElement;
+}
+
+const createScoreboard = (players) => {
+  const scoreboardElement = document.createElement("div");
+  scoreboardElement.classList.add("scoreboard");
+
+  players.forEach(player => scoreboardElement
+    .appendChild(createScore(player)))
+
+  return scoreboardElement;
+}
+
+const createScore = (player) => {
+  const scoreElement = document.createElement("div");
+  scoreElement.classList.add("score");
+
+  if (player.mark) {
+    const playerMark = player.mark === "x" ? "X" : "O";
+
+    scoreElement.innerHTML = `
+      <span class="heading-body">${playerMark} (${player.name})</span>
+      <span class="heading-m">${player.score}<span>
+    `;
+
+    return scoreElement;
   }
 
-  return ELEMENT;
-};
+  scoreElement.innerHTML = `
+      <span class="heading-body">${player.name}</span>
+      <span class="heading-m">${player.score}<span>
+    `;
 
-const ASSING_CURRENT_PLAYER = (currentPlayer) => {
-  ROOT.dataset.current = currentPlayer.mark;
-};
+  return scoreElement;
+}
 
-const RENDER = () => {
-  ROOT.innerHTML = "";
+const renderGame = () => {
+  root.innerHTML = "";
+  root.appendChild(createGameboard(gameboardArr));
+  root.appendChild(createScoreboard(playersArr));
+}
 
-  if (PLAYERS.some((player) => player.isWinner) || GAMEBOARD_ARR.every(cell => cell.mark)) {
-    ROOT.appendChild(CREATE_POPUP(currentPlayer, PLAYERS, GAMEBOARD_ARR, ROOT));
-  }
+const changeCurrentPlayer = (arr) => {
+  currentPlayer === arr[0]
+  ? currentPlayer = arr[1]
+  : currentPlayer = arr[0]
+}
 
-  const gameboardElement = CREATE_GAMEBOARD(GAMEBOARD_ARR);
-  ROOT.appendChild(gameboardElement);
+const playerChoice = (arr) => {
+  bindCellElements(arr)
+}
 
-  // Highlight the winning combination cells
-  const winningCombination = CHECK_WINNER(GAMEBOARD_ARR).winningCombination;
-  if (winningCombination) {
-    gameboardElement.querySelectorAll(".gameboard-cell").forEach((cell, index) => {
-      if (winningCombination.includes(index)) {
-        cell.classList.add("winning-cell");
-      }
-    });
-  }
-};
+const cpuChoice = (arr) => {
 
-const CHANGE_PLAYER = () => {
-  currentPlayer === PLAYERS[0]
-    ? (currentPlayer = PLAYERS[1])
-    : (currentPlayer = PLAYERS[0]);
-};
-
-const PLAYER_CHOICE = (currentPlayer, arr) => {
-  const CELLS = Array.from(document.querySelectorAll(".gameboard-cell"));
-  CELLS.forEach((cell) =>
-    cell.addEventListener("click", (e) => {
-      if (!e.target.dataset.mark) {
-        const CELL_INDEX = CELLS.indexOf(e.target);
-        arr[CELL_INDEX].mark = currentPlayer.mark;
-        CHECK_WINNER(arr);
-        CHANGE_PLAYER();
-        GAME_CONTROLLER();
-      }
-    })
-  );
-};
-
-const CPU_CHOICE = (currentPlayer, arr) => {
-  const emptyCellIndices = arr.reduce((indices, cell, index) => {
+  const emptyCells = arr.reduce((newArr, cell) => {
     if (!cell.mark) {
-      indices.push(index);
+      newArr.push(cell.index);
     }
-    return indices;
+    return newArr;
   }, []);
 
-  if (emptyCellIndices.length === 0) {
-    GAME_CONTROLLER(); // Handle case when no empty cells are available
-    return;
-  }
+  if (emptyCells.length === 0) return;
 
-  const CELL_INDEX = emptyCellIndices[Math.floor(Math.random() * emptyCellIndices.length)];
+  const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+  arr[randomIndex].mark = currentPlayer.mark;
 
-  arr[CELL_INDEX].mark = currentPlayer.mark;
-  CHECK_WINNER(arr);
-  CHANGE_PLAYER();
-  GAME_CONTROLLER();
+  setTimeout(() => {
+    checkWinner(arr, playersArr)
+    changeCurrentPlayer(playersArr)
+    gameController(arr);
+  }, 300)
 };
 
-const CHECK_WINNER = (arr) => {
+const renderWinningCells = (arr) => {
+  const cells = Array.from(document.querySelectorAll(".gameboard-cell"));
+
+  arr.forEach(index => cells[index].classList.add("winning-cell"))
+
+  return
+}
+
+const checkWinner = (arr, players) => {
   let isWin = false;
-  let isDraw = false;
-
-  let winningCombination;
-
-  const WINNING_COMBINATIONS = [
+  const winningCombinations = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -136,13 +147,11 @@ const CHECK_WINNER = (arr) => {
     [2, 4, 6],
   ];
 
-  WINNING_COMBINATIONS.forEach((comb) => {
+  winningCombinations.forEach((comb) => {
     if (
       arr[comb[0]].mark === arr[comb[1]].mark &&
       arr[comb[1]].mark === arr[comb[2]].mark &&
-      arr[comb[0]].mark &&
-      arr[comb[1]].mark &&
-      arr[comb[2]].mark
+      comb.every(index => arr[index].mark)
     ) {
         isWin = true;
         winningCombination = comb;
@@ -151,94 +160,111 @@ const CHECK_WINNER = (arr) => {
 
   if (isWin) {
     currentPlayer.isWinner = true;
-    return { result: "WIN", winningCombination: winningCombination };
+    currentPlayer.score++;
+    return "win";
   }
 
   if (arr.every((cell) => cell.mark)) {
-    isDraw = true; // Set isDraw to true when all cells are marked
-    return "DRAW";
+    players[2].score++;
+    return "draw";
   }
   return false;
 };
 
-const CREATE_POPUP = (currentPlayer, players, arr, root) => {
-  const ELEM = document.createElement("div");
-  ELEM.classList.add("popup");
-  const winner = players.find(player => player.isWinner);
-  const isDraw = arr.every(cell => cell.mark);
-
-  // PLAYER VS CPU
-  if (players.some(player => !player.isHuman)) {
-    const CPU_PLAYER = players.find(player => !player.isHuman);
-    const message = CPU_PLAYER.isWinner ? "OH NO, YOU LOST…" : "YOU WON!";
-    const playerName = CPU_PLAYER.isWinner ? CPU_PLAYER.name : currentPlayer.name;
-
-    ELEM.innerHTML = `
-      <span class="heading-xs">${message}</span>
-      <div>
-        <div class="popup-mark" data-mark="${currentPlayer.mark}"></div>
-        <span class="heading-l">${playerName} TAKES THE ROUND</span>
-      </div>
-      <div>
-        <button class="secondary-button-one">QUIT</button>
-        <button class="secondary-button-two">NEXT ROUND</button>
-      </div>
-    `;
-  // WHEN PLAYER VS PLAYER
-  } else if (players.every(player => player.isHuman)) {
-    const winnerName = winner ? winner.name : 0;
-    const message = `${winnerName === currentPlayer.name ? "YOU" : winnerName} WINS!`;
-
-    ELEM.innerHTML = `
-      <span class="heading-xs">${message}</span>
-      <div>
-        <div class="popup-mark" data-mark="${currentPlayer.mark}"></div>
-        <span class="heading-l">TAKES THE ROUND</span>
-      </div>
-      <div>
-        <button class="secondary-button-one">QUIT</button>
-        <button class="secondary-button-two">NEXT ROUND</button>
-      </div>
-    `;
-  }
-  
-  if (isDraw && !winner) {
-    root.dataset.current = "";
-    ELEM.innerHTML = `
-      <span class="heading-l">ROUND TIED</span>
-      <div>
-        <button class="secondary-button-one">QUIT</button>
-        <button class="secondary-button-two">NEXT ROUND</button>
-      </div>
-    `;
-  }
-
-  return ELEM;
-};
-
-const GAME_CONTROLLER = () => {
-  RENDER();
-
-  if (PLAYERS.some((player) => player.isWinner) || GAMEBOARD_ARR.every(cell => cell.mark)) {
-    const CELLS = Array.from(
-      document.querySelectorAll(".gameboard-cell")
-    )
-    CREATE_POPUP(currentPlayer, PLAYERS, GAMEBOARD_ARR, ROOT)
-    return;
-  }
-
-  ASSING_CURRENT_PLAYER(currentPlayer);
-
-  currentPlayer.isHuman
-    ? PLAYER_CHOICE(currentPlayer, GAMEBOARD_ARR)
-    : CPU_CHOICE(currentPlayer, GAMEBOARD_ARR);
-};
-
-GAME_CONTROLLER();
-
-const INIT = () => {
-  currentPlayer = PLAYERS[0];
-  GAMEBOARD_ARR = Array.from({ length: 9 }, (index, mark) => ({ mark: "", index }));
-
-  GAME_CONTROLLER();
+const isAnyWinner = () => {
+  return playersArr.some(player => player.isWinner);
 }
+
+const createPopup = () => {
+  const popupElement = document.createElement("div");
+  popupElement.classList.add("popup");
+
+  // IF PLAYER WIN
+  if (isAnyWinner()) {
+    changeCurrentPlayer(playersArr);
+
+    const winnerIcon = currentPlayer.mark === "x"
+    ? `<svg class="x-icon" width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill-rule="evenodd"/></svg>`
+    : `<svg class="o-icon" width="64" height="64" xmlns="http://www.w3.org/2000/svg"><path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z"/></svg>`
+
+    popupElement.innerHTML = `
+      <span class="heading-xs">${currentPlayer.name} WIN!</span>
+      <div>
+        <div class="popup-mark" data-mark="${currentPlayer.mark}">${winnerIcon}</div>
+        <div class="heading-l" data-mark="${currentPlayer.mark}">TAKES THE ROUND!</div>
+      </div>
+      <div>
+        <button class="secondary-button-one">QUIT</button>
+        <button class="secondary-button-two next-round-button">NEXT ROUND</button>
+      </div>
+    `
+    return popupElement;
+  }
+
+  // IF THERE IS A DRAW
+  popupElement.innerHTML = `
+  <span class="heading-l">ROUND TIED</span>
+  <div>
+      <button class="secondary-button-one">QUIT</button>
+      <button class="secondary-button-two next-round-button">NEXT ROUND</button>
+    </div>
+  `;
+  return popupElement;
+}
+
+const bindCellElements = (arr) => {
+  const cellElements = Array.from(document
+    .querySelectorAll(".gameboard-cell"));
+
+  cellElements.forEach(cell => {
+    cell.addEventListener("click", (e) => {
+      if (e.target.dataset.mark === "") {
+        const cellIndex = cellElements.indexOf(e.target);
+       arr[cellIndex].mark = currentPlayer.mark;
+        checkWinner(arr, playersArr)
+        changeCurrentPlayer(playersArr)
+        gameController(arr);
+      }
+    })
+  })
+
+  return { cellElements }
+}
+
+const bindNextRoundButton = () => {
+  const nextRoundButtons = Array.from(document.querySelectorAll(".next-round-button"));
+  const popup = document.querySelector(".popup");
+
+  nextRoundButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      console.log("XD")
+      popup.remove()
+      nextRound();
+    })
+  })
+}
+
+const nextRound = () => {
+  playersArr[0].isWinner = false;
+  playersArr[1].isWinner = false;
+  currentPlayer = playersArr[0];
+  gameboardArr = Array.from({ length: 9 }, (_, index) => ({ mark: "", index }));
+  winningCombination = [];
+
+  gameController(gameboardArr)
+}
+
+const gameController = (arr) => {
+  renderGame()
+
+  if (isAnyWinner() || arr.every(cell => cell.mark)) {
+    renderWinningCells(winningCombination);
+    root.appendChild(createPopup());
+    bindNextRoundButton();
+    return;
+};
+
+  currentPlayer.isHuman ? playerChoice(arr) : cpuChoice(arr);
+}
+
+gameController(gameboardArr)
