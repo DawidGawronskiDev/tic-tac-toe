@@ -40,25 +40,25 @@
 }
 
 .heading-l {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 40px;
   kerning: 2.5px;
 }
 
 .heading-m {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 24px;
   kerning: 1.5px;
 }
 
 .heading-s {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 20px;
   kerning: 1.25px;
 }
 
 .heading-s {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 16px;
   kerning: 1px;
 }
@@ -71,7 +71,7 @@
 
 *[class^="secondary-button"] {
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 16px;
   kerning: 1px;
 

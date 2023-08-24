@@ -245,6 +245,29 @@ const createPopup = () => {
   return popupElement;
 };
 
+const createRestartPopup = () => {
+  const popupElement = document.createElement("div");
+  popupElement.classList.add("popup");
+
+  popupElement.innerHTML = `
+    <span class="heading-l">RESTART GAME?</span>
+    <div>
+      <button class="secondary-button-one cancel-restart">NO, CANCEL</button>
+      <button class="secondary-button-two">YES, RESTART</button>
+    </div>
+  `;
+
+  return popupElement;
+}
+
+const bindCancelRestartButton = () => {
+  const cancelRestartButton = document.querySelector(".cancel-restart");
+  const popupElement = document.querySelector(".popup");
+  cancelRestartButton.addEventListener("click", e => {
+    popupElement.remove();
+  })
+}
+
 const bindCellElements = (arr) => {
   const cellElements = Array.from(document.querySelectorAll(".gameboard-cell"));
 
@@ -271,7 +294,6 @@ const bindNextRoundButton = () => {
 
   nextRoundButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      console.log("XD");
       popup.remove();
       nextRound();
     });
@@ -282,7 +304,8 @@ const bindRestartButton = () => {
   const restartButtonElement = document.querySelector(".restart-button");
 
   restartButtonElement.addEventListener("click", (e) => {
-    console.log("Hi!");
+    root.appendChild(createRestartPopup());
+    bindCancelRestartButton();
   });
 };
 
