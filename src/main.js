@@ -92,6 +92,7 @@ const createScore = (player) => {
 
 import Logo from "./assets/logo.svg";
 import Restart from "./assets/icon-restart.svg";
+import { doc } from "prettier";
 
 const createTurnDisplay = (currentPlayer) => {
   const turnDisplayElement = document.createElement("div");
@@ -286,6 +287,62 @@ const bindRestartButton = () => {
   });
 };
 
+const bindPickPlayer = (players) => {
+  const pickX = document.querySelector(".pick-x");
+  const pickO = document.querySelector(".pick-o");
+  const indicator = document.querySelector(".indicator");
+  const vsCPU = document.querySelector(".vs-cpu");
+  const vsPlayer = document.querySelector(".vs-player");
+
+  pickX.addEventListener("click", (e) => {
+    indicator.style.transform = "TranslateX(0)";
+    pickO.style.filter = `invert(83%) sepia(11%) saturate(406%) hue-rotate(153deg)
+    brightness(88%) contrast(94%)`;
+    pickX.style.filter = `invert(15%) sepia(30%) saturate(771%) hue-rotate(154deg)
+    brightness(98%) contrast(89%)`;
+
+    players[0].isHuman = true;
+    players[1].isHuman = false;
+  });
+
+  pickO.addEventListener("click", (e) => {
+    indicator.style.transform = "TranslateX(calc(100% - 16px))";
+    pickO.style.filter = `invert(15%) sepia(30%) saturate(771%) hue-rotate(154deg)
+    brightness(98%) contrast(89%)`;
+    pickX.style.filter = `invert(83%) sepia(11%) saturate(406%) hue-rotate(153deg)
+    brightness(88%) contrast(94%)`;
+
+    players[0].isHuman = false;
+    players[1].isHuman = true;
+  });
+
+  vsCPU.addEventListener("click", (e) => {
+    if (players[0].isHuman) {
+      players[0].name = "YOU";
+      players[1].name = "CPU";
+    } else {
+      players[0].name = "CPU";
+      players[1].name = "YOU";
+    }
+
+    gameController(gameboardArr);
+  });
+
+  vsPlayer.addEventListener("click", (e) => {
+    if (players[0].isHuman) {
+      players[0].name = "PLAYER 1";
+      players[1].name = "PLAYER 2";
+      players[1].isHuman = true;
+    } else {
+      players[0].name = "PLAYER 2";
+      players[1].name = "PLAYER 1";
+      players[0].isHuman = true;
+    }
+
+    gameController(gameboardArr);
+  });
+};
+
 const nextRound = () => {
   playersArr[0].isWinner = false;
   playersArr[1].isWinner = false;
@@ -294,6 +351,38 @@ const nextRound = () => {
   winningCombination = [];
 
   gameController(gameboardArr);
+};
+
+const createGameSetup = () => {
+  const gameSetupElement = document.createElement("div");
+
+  gameSetupElement.innerHTML = `
+  <div class="game-setup">
+    <img src="${Logo}" alt="" />
+
+    <div class="pick-player-container">
+      <span class="heading-xs">PICK PLAYER 1’S MARK</span>
+      <div class="pick-player-buttons-container">
+        <div class="indicator"></div>
+        <button class="pick-x"></button>
+        <button class="pick-o"></button>
+      </div>
+      <span class="body">REMEMBER : X GOES FIRST</span>
+    </div>
+    <div class="pick-opponent">
+    <button class="button-one heading-s vs-cpu">NEW GAME (VS CPU)</button>
+    <button class="button-two heading-s vs-player">NEW GAME (VS PLAYER)</button>
+    </div>
+  </div>
+  `;
+
+  return gameSetupElement;
+};
+
+const gameSetup = () => {
+  root.innerHTML = "";
+  root.appendChild(createGameSetup());
+  bindPickPlayer(playersArr);
 };
 
 const gameController = (arr) => {
@@ -312,4 +401,6 @@ const gameController = (arr) => {
   bindRestartButton();
 };
 
-gameController(gameboardArr);
+// gameController(gameboardArr);
+
+gameSetup();

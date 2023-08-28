@@ -83,6 +83,33 @@
   padding: 15px;
 }
 
+.button-one,
+.button-two {
+  width: 100%;
+
+  border: none;
+  border-radius: 15px;
+
+  padding: 16px 0;
+}
+
+.button-one:hover,
+.button-two:hover {
+  cursor: pointer;
+  transition: 0.2s;
+  filter: brightness(1.2);
+}
+
+.button-one {
+  background-color: var(--c3);
+  box-shadow: 0px -4px 0px 0px #cc8b13 inset;
+}
+
+.button-two {
+  background-color: var(--c1);
+  box-shadow: 0px -4px 0px 0px #118c87 inset;
+}
+
 .secondary-button-one {
   background-color: var(--c7);
   box-shadow: 0px -4px 0px 0px #6b8997 inset;
@@ -360,4 +387,111 @@ main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
 
 .score:nth-child(3) {
   background-color: var(--c7);
+}
+
+/* ********** GAME SETUP ********** */
+
+.game-setup {
+  width: 460px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+
+  color: var(--c7);
+}
+
+.pick-player-container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 20px;
+
+  border-radius: 15px;
+  background-color: var(--c6);
+  box-shadow: 0px -8px 0px 0px #10212a inset;
+
+  padding: 24px;
+}
+
+.game-setup .body {
+  opacity: 0.5;
+}
+
+.pick-player-buttons-container {
+  position: relative;
+
+  width: 100%;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--c5);
+
+  border-radius: 15px;
+  overflow: hidden;
+
+  padding: 8px;
+}
+
+.pick-player-buttons-container .indicator {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+
+  border-radius: 10px;
+
+  width: 50%;
+  height: 54px;
+
+  background-color: var(--c7);
+
+  transition: 0.2s;
+}
+
+.pick-player-buttons-container > * {
+  flex: 1;
+  height: 100%;
+
+  border: none;
+  background-color: var(--c6);
+}
+
+.game-setup button[class^="pick"] {
+  cursor: pointer;
+  background-color: hsla(0, 0%, 0%, 0);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20%;
+}
+
+.game-setup .pick-x,
+.game-setup .pick-o {
+  z-index: 2;
+}
+
+.game-setup .pick-x {
+  background-image: url("./assets/icon-x.svg");
+  filter: invert(15%) sepia(30%) saturate(771%) hue-rotate(154deg)
+    brightness(98%) contrast(89%);
+}
+
+.game-setup .pick-o {
+  background-image: url("./assets/icon-o.svg");
+  filter: invert(83%) sepia(11%) saturate(406%) hue-rotate(153deg)
+    brightness(88%) contrast(94%);
+}
+
+.pick-opponent {
+  width: 100%;
+
+  display: grid;
+  gap: 20px;
 }
