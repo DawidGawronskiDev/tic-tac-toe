@@ -207,7 +207,8 @@ main {
   justify-self: right;
 }
 
-.restart-button {
+.restart-popup-button {
+  cursor: pointer;
   aspect-ratio: 1 / 1;
   height: 100%;
 

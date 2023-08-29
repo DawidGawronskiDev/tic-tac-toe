@@ -92,7 +92,6 @@ const createScore = (player) => {
 
 import Logo from "./assets/logo.svg";
 import Restart from "./assets/icon-restart.svg";
-import { doc } from "prettier";
 
 const createTurnDisplay = (currentPlayer) => {
   const turnDisplayElement = document.createElement("div");
@@ -112,7 +111,7 @@ const createTurnDisplay = (currentPlayer) => {
   turnElement.innerHTML += "<span>TURN</span>";
 
   const restartButton = document.createElement("button");
-  restartButton.classList.add("restart-button");
+  restartButton.classList.add("restart-popup-button");
 
   const restartIcon = new Image();
   restartIcon.src = Restart;
@@ -228,7 +227,7 @@ const createPopup = () => {
         <div class="heading-l" data-mark="${currentPlayer.mark}">TAKES THE ROUND!</div>
       </div>
       <div>
-        <button class="secondary-button-one">QUIT</button>
+        <button class="secondary-button-one quit-button">QUIT</button>
         <button class="secondary-button-two next-round-button">NEXT ROUND</button>
       </div>
     `;
@@ -239,7 +238,7 @@ const createPopup = () => {
   popupElement.innerHTML = `
   <span class="heading-l">ROUND TIED</span>
   <div>
-      <button class="secondary-button-one">QUIT</button>
+      <button class="secondary-button-one quit-button">QUIT</button>
       <button class="secondary-button-two next-round-button">NEXT ROUND</button>
     </div>
   `;
@@ -279,13 +278,51 @@ const bindNextRoundButton = () => {
   });
 };
 
+const bindCancelRestartButton = () => {
+  const cancelRestartButton = document.querySelector(".cancel-restart");
+  const popupElement = document.querySelector(".popup");
+  cancelRestartButton.addEventListener("click", e => {
+    console.log(e.target)
+    popupElement.remove();
+  })
+}
+
 const bindRestartButton = () => {
   const restartButtonElement = document.querySelector(".restart-button");
+  const popupElement = document.querySelector(".popup");
 
   restartButtonElement.addEventListener("click", (e) => {
-    console.log("Hi!");
+    root.appendChild(createRestartPopup());
+    
+    popupElement.remove();
+    restartGame();
   });
 };
+
+const bindRestartPopupButton = () => {
+  const restartButtonElement = document.querySelector(".restart-popup-button");
+
+  restartButtonElement.addEventListener("click", (e) => {
+    root.appendChild(createRestartPopup());
+    bindCancelRestartButton();
+    bindRestartButton();
+  });
+};
+
+const createRestartPopup = () => {
+  const popupElement = document.createElement("div");
+  popupElement.classList.add("popup");
+
+  popupElement.innerHTML = `
+    <span class="heading-l">RESTART GAME?</span>
+    <div>
+      <button class="secondary-button-one cancel-restart">NO, CANCEL</button>
+      <button class="secondary-button-two restart-button">YES, RESTART</button>
+    </div>
+  `;
+
+  return popupElement;
+}
 
 const bindPickPlayer = (players) => {
   const pickX = document.querySelector(".pick-x");
@@ -343,6 +380,15 @@ const bindPickPlayer = (players) => {
   });
 };
 
+const bindQuitButton = () => {
+  const quitButton = document.querySelector(".quit-button");
+
+  quitButton.addEventListener("click", (e) => {
+    restartGame();
+    gameSetup();
+  })
+}
+
 const nextRound = () => {
   playersArr[0].isWinner = false;
   playersArr[1].isWinner = false;
@@ -385,6 +431,13 @@ const gameSetup = () => {
   bindPickPlayer(playersArr);
 };
 
+const restartGame = () => {
+  gameboardArr = Array.from({ length: 9 }, (_, index) => ({ mark: "", index }));
+  playersArr.forEach(player => player.score = 0);
+
+  nextRound();
+}
+
 const gameController = (arr) => {
   root.dataset.current = currentPlayer.mark;
   renderGame();
@@ -392,15 +445,14 @@ const gameController = (arr) => {
   if (isAnyWinner() || arr.every((cell) => cell.mark)) {
     renderWinningCells(winningCombination);
     root.appendChild(createPopup());
+    bindQuitButton();
     bindNextRoundButton();
     return;
   }
 
   currentPlayer.isHuman ? playerChoice(arr) : cpuChoice(arr);
 
-  bindRestartButton();
+  bindRestartPopupButton();
 };
-
-// gameController(gameboardArr);
 
 gameSetup();
