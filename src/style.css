@@ -513,7 +513,7 @@ main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
     padding: 0 5vw;
   }
   .popup > *:nth-child(2) {
-    gap: 0;
+    gap: 5px;
   }
   .popup .heading-xs {
     font-size: 14px;
