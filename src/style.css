@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* @font-face {
     font-family: 'MyFont';
     src: url('./my-font.woff2') format('woff2');
@@ -51,4 +52,520 @@ main {
     transition: 0.1s;
     transform: translateY(5px);
     box-shadow: 0 0 0 0 red;
+=======
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@300;500;700&family=Outfit:wght@500;700&display=swap");
+
+@keyframes drop-from-up {
+  from {
+    opacity: 0%;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 100%;
+    transform: translateY();
+  }
+}
+
+@keyframes gameboard-cell {
+  from {
+    background-position-y: 0%;
+  }
+  to {
+    background-position-y: 50%;
+  }
+}
+
+:root {
+  /* Light Blue */
+  --c1: #31c4bf;
+  /* Light Blue (Hover) */
+  --c2: #63e9e4;
+  /* Light Yellow */
+  --c3: #f2b137;
+  /* Light Yellow (Hover) */
+  --c4: #ffc860;
+  /* Dark Navy */
+  --c5: #1a2a33;
+  /* Semi Dark Navy */
+  --c6: #1f3641;
+  /* Silver */
+  --c7: #a8bfc9;
+  /* Silver (Hover) */
+  --c8: #dbe8ed;
+}
+
+.heading-l {
+  font-weight: bold;
+  font-size: 40px;
+  kerning: 2.5px;
+}
+
+.heading-m {
+  font-weight: bold;
+  font-size: 24px;
+  kerning: 1.5px;
+}
+
+.heading-s {
+  font-weight: bold;
+  font-size: 20px;
+  kerning: 1.25px;
+}
+
+.heading-s {
+  font-weight: bold;
+  font-size: 16px;
+  kerning: 1px;
+}
+
+.body {
+  font-weight: medium;
+  font-size: 14px;
+  kerning: 0.8px;
+}
+
+*[class^="secondary-button"] {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  kerning: 1px;
+
+  color: var(--c5);
+
+  border-radius: 10px;
+  border: none;
+
+  padding: 15px;
+}
+
+.button-one,
+.button-two {
+  width: 100%;
+
+  border: none;
+  border-radius: 15px;
+
+  padding: 16px 0;
+}
+
+.button-one:hover,
+.button-two:hover {
+  cursor: pointer;
+  transition: 0.2s;
+  filter: brightness(1.2);
+}
+
+.button-one {
+  background-color: var(--c3);
+  box-shadow: 0px -4px 0px 0px #cc8b13 inset;
+}
+
+.button-two {
+  background-color: var(--c1);
+  box-shadow: 0px -4px 0px 0px #118c87 inset;
+}
+
+.secondary-button-one {
+  background-color: var(--c7);
+  box-shadow: 0px -4px 0px 0px #6b8997 inset;
+}
+
+.secondary-button-one:hover {
+  transition: 0.2s;
+  background-color: var(--c8);
+}
+
+.secondary-button-two {
+  background-color: var(--c3);
+  box-shadow: 0px -4px 0px 0px #cc8b13 inset;
+}
+
+.secondary-button-two:hover {
+  transition: 0.2s;
+  background-color: var(--c4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+
+  outline: 1px solid red;
+  box-sizing: border-box;
+}
+
+main {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: "Outfit", sans-serif;
+
+  background-color: var(--c5);
+}
+
+/* ********** TURN DISPLAY ***********/
+
+.turn-display {
+  height: 52px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-content: center;
+  gap: 20px;
+
+  margin: 0 0 20px 0;
+}
+
+.turn-elem {
+  height: 52px;
+}
+
+.turn-display > *:nth-child(1) {
+  align-self: center;
+  justify-self: left;
+}
+
+.turn-display > *:nth-child(2) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: var(--c6);
+  color: var(--c7);
+
+  border-radius: 10px;
+}
+
+.turn-mark {
+  aspect-ratio: 1 / 1;
+  width: 20px;
+
+  filter: invert(82%) sepia(8%) saturate(559%) hue-rotate(153deg)
+    brightness(91%) contrast(89%);
+}
+
+.turn-mark[data-mark="x"] {
+  background-image: url("./assets/icon-x.svg");
+  background-size: 100%;
+}
+
+.turn-mark[data-mark="o"] {
+  background-image: url("./assets/icon-o.svg");
+  background-size: 100%;
+}
+
+.turn-display > *:nth-child(3) {
+  align-self: center;
+  justify-self: right;
+}
+
+.restart-popup-button {
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+  height: 100%;
+
+  border: none;
+  border-radius: 10px;
+
+  background-color: var(--c8);
+  box-shadow: 0px -4px 0px 0px var(--c7) inset;
+}
+
+.restart-button:hover {
+  filter: brightness(1.2);
+  transition: 0.2s;
+}
+
+/* ********** GAMEBOARD ********** */
+
+.x-icon {
+  fill: var(--c1);
+}
+
+.o-icon {
+  fill: var(--c3);
+}
+
+.x-icon,
+.o-icon {
+  aspect-ratio: 1 / 1;
+  transform: scale(110%);
+}
+
+.gameboard-elem {
+  aspect-ratio: 1 / 1;
+
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  gap: 20px;
+}
+
+.gameboard-cell {
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--c6);
+  box-shadow: 0px -8px 0px 0px #10212a inset;
+
+  border-radius: 15px;
+}
+
+.gameboard-cell[data-mark=" "]:hover {
+  animation: gameboard-cell 1s ease-in-out;
+}
+
+main[data-current="x"] .gameboard-cell[data-mark=""]:hover {
+  background-image: url("./assets/icon-x-outline.svg");
+}
+
+main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
+  background-image: url("./assets/icon-o-outline.svg");
+}
+
+.winning-cell[data-mark="x"] {
+  background-color: var(--c1);
+}
+
+.winning-cell[data-mark="o"] {
+  background-color: var(--c3);
+}
+
+.winning-cell .x-icon,
+.winning-cell .o-icon {
+  fill: var(--c6);
+}
+
+/* ********** POPUP ********** */
+
+.popup {
+  z-index: 999;
+
+  position: fixed;
+  width: 100%;
+  height: 266px;
+
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+
+  box-shadow: 0 0 0 100vh hsla(0, 100%, 0%, 0.7);
+  background-color: var(--c6);
+
+  animation: drop-from-up 0.5s ease-in-out;
+}
+
+.popup > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup > *:nth-child(2) {
+  gap: 24px;
+}
+
+.popup > *:nth-child(3) {
+  gap: 16px;
+}
+
+.popup .heading-xs {
+  color: var(--c7);
+}
+
+.popup .heading-l[data-mark="x"] {
+  color: var(--c1);
+}
+
+.popup .heading-l[data-mark="o"] {
+  color: var(--c3);
+}
+
+.popup .heading-l {
+  color: var(--c7);
+}
+
+.popup-mark {
+  aspect-ratio: 1 / 1;
+  width: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ********** SCOREBOARD ********** */
+
+.scoreboard {
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+
+  grid-template-areas: "p1 ties p2";
+
+  margin: 16px 0 0 0;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  padding: 12px 0;
+}
+
+.score:nth-child(1) {
+  grid-area: p1;
+  background-color: var(--c1);
+}
+
+.score:nth-child(2) {
+  grid-area: p2;
+  background-color: var(--c3);
+}
+
+.score:nth-child(3) {
+  background-color: var(--c7);
+}
+
+/* ********** GAME SETUP ********** */
+
+.game-setup {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+
+  color: var(--c7);
+}
+
+.pick-player-container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 20px;
+
+  border-radius: 15px;
+  background-color: var(--c6);
+  box-shadow: 0px -8px 0px 0px #10212a inset;
+
+  padding: 24px;
+}
+
+.game-setup .body {
+  opacity: 0.5;
+}
+
+.pick-player-buttons-container {
+  position: relative;
+
+  width: 100%;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--c5);
+
+  border-radius: 15px;
+  overflow: hidden;
+
+  padding: 8px;
+}
+
+.pick-player-buttons-container .indicator {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+
+  border-radius: 10px;
+
+  width: 50%;
+  height: 54px;
+
+  background-color: var(--c7);
+
+  transition: 0.2s;
+}
+
+.pick-player-buttons-container > * {
+  flex: 1;
+  height: 100%;
+
+  border: none;
+  background-color: var(--c6);
+}
+
+.game-setup button[class^="pick"] {
+  cursor: pointer;
+  background-color: hsla(0, 0%, 0%, 0);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20%;
+}
+
+.game-setup .pick-x,
+.game-setup .pick-o {
+  z-index: 2;
+}
+
+.game-setup .pick-x {
+  background-image: url("./assets/icon-x.svg");
+  filter: invert(15%) sepia(30%) saturate(771%) hue-rotate(154deg)
+    brightness(98%) contrast(89%);
+}
+
+.game-setup .pick-o {
+  background-image: url("./assets/icon-o.svg");
+  filter: invert(83%) sepia(11%) saturate(406%) hue-rotate(153deg)
+    brightness(88%) contrast(94%);
+}
+
+.pick-opponent {
+  width: 100%;
+
+  display: grid;
+  gap: 20px;
+}
+
+/* ********** GAME CONTAINER ***********/
+
+.game-container {
+  width: 100%;
+  max-width: 460px;
+}
+
+@media only screen and (max-width: 500px) {
+  .game-container {
+    max-width: 90vw;
+  }
+  .x-icon,
+  .o-icon {
+    aspect-ratio: 1 / 1;
+    transform: scale(90%);
+  }
+>>>>>>> dev
 }

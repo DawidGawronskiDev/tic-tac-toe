@@ -1,4 +1,5 @@
 import "./style.css";
+<<<<<<< HEAD
 
 const root = document.querySelector('#root')
 const gameboardArr = Array.from({ length: 9 }, (_, index) => ({ mark: "", index }))
@@ -61,3 +62,10 @@ const changePlayer = () => {
 
 renderGameboard(gameboardArr, root)
 gameController()
+=======
+import { gameSetup } from "./game/game";
+
+const root = document.querySelector("#root");
+
+gameSetup();
+>>>>>>> dev
