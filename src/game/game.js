@@ -128,11 +128,23 @@ const bindNextRoundButton = () => {
     });
 };
 
+const createGameContainer = () => {
+  const gameContainer = document.createElement("div");
+  gameContainer.classList.add("game-container");
+
+  return gameContainer;
+}
+
 const renderGame = () => {
     root.innerHTML = "";
-    root.appendChild(createTurnDisplay(currentPlayer));
-    root.appendChild(createGameboard(gameboardArr));
-    root.appendChild(createScoreboard(playersArr));
+
+    const gameContainer = createGameContainer();
+
+    gameContainer.appendChild(createTurnDisplay(currentPlayer));
+    gameContainer.appendChild(createGameboard(gameboardArr));
+    gameContainer.appendChild(createScoreboard(playersArr));
+
+    root.appendChild(gameContainer)
 };
 
 const gameController = (arr) => {
@@ -154,9 +166,10 @@ const gameController = (arr) => {
 
 const createGameSetup = () => {
     const gameSetupElement = document.createElement("div");
+    gameSetupElement.classList.add("game-container")
+    gameSetupElement.classList.add("game-setup")
   
     gameSetupElement.innerHTML = `
-    <div class="game-setup">
       <img src="${Logo}" alt="" />
   
       <div class="pick-player-container">
@@ -172,7 +185,6 @@ const createGameSetup = () => {
       <button class="button-one heading-s vs-cpu">NEW GAME (VS CPU)</button>
       <button class="button-two heading-s vs-player">NEW GAME (VS PLAYER)</button>
       </div>
-    </div>
     `;
   
     return gameSetupElement;
@@ -286,5 +298,3 @@ const bindRestartButton = () => {
 };
 
 export { gameController, gameSetup };
-
-

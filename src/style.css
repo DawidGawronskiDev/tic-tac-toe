@@ -134,7 +134,7 @@
   margin: 0;
   padding: 0;
 
-  /* outline: 1px solid red; */
+  outline: 1px solid red;
   box-sizing: border-box;
 }
 
@@ -142,8 +142,9 @@ main {
   width: 100%;
   min-height: 100vh;
 
-  display: grid;
-  place-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   font-family: "Outfit", sans-serif;
 
@@ -153,7 +154,6 @@ main {
 /* ********** TURN DISPLAY ***********/
 
 .turn-display {
-  width: 460px;
   height: 52px;
 
   display: grid;
@@ -242,7 +242,6 @@ main {
 
 .gameboard-elem {
   aspect-ratio: 1 / 1;
-  width: 460px;
 
   display: grid;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
@@ -250,12 +249,14 @@ main {
 }
 
 .gameboard-cell {
+
   background-repeat: no-repeat;
   background-position: center;
   background-size: 50%;
 
-  display: grid;
-  place-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   background-color: var(--c6);
   box-shadow: 0px -8px 0px 0px #10212a inset;
@@ -354,7 +355,6 @@ main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
 /* ********** SCOREBOARD ********** */
 
 .scoreboard {
-  width: 460px;
 
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -393,7 +393,6 @@ main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
 /* ********** GAME SETUP ********** */
 
 .game-setup {
-  width: 460px;
 
   display: flex;
   flex-direction: column;
@@ -495,4 +494,22 @@ main[data-current="o"] .gameboard-cell[data-mark=""]:hover {
 
   display: grid;
   gap: 20px;
+}
+
+/* ********** GAME CONTAINER ***********/
+
+.game-container {
+  width: 100%;
+  max-width: 460px;
+}
+
+@media only screen and (max-width: 500px) {
+  .game-container {
+    max-width: 90vw;
+  }
+  .x-icon,
+  .o-icon {
+    aspect-ratio: 1 / 1;
+    transform: scale(90%);
+  }
 }
